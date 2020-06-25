@@ -9,8 +9,8 @@
     2-1. This project use node module which i uploaded, package.json, and use mongo 4.0v
     2-2. You just compile node code on cmd, anything you want
     2-3. I want to know much more about router and mongodb connection
-         so it made by route function(process/login, process/adduser)
-    
+         so this code target for route function(process/login, process/adduser)
+         
 3. Contribute
     3-1. If you want, you can enjoy , use, modfiy this code for free 
     3-2. This project have MIT LICENSE
@@ -23,7 +23,8 @@
     SOFTWARE.
     
 4. Code Status
-    4-1. NONE
+    4-1. 2020. 6. 25 19:05(KR)
+    Add function about authorization and db contact for checkout list(who use adduse function)
     
 5. Caution
     5-1. You should checkout your node.js json file plz...

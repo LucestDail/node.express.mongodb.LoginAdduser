@@ -15,6 +15,9 @@ var expressErrorHandler = require('express-error-handler');
 //session midleware import
 var expressSession = require('express-session');
 
+//mongoose midleware import
+var mongoose = require('mongoose');
+
 // declear express variable as app
 var app = express();
 
@@ -25,7 +28,7 @@ app.set('port', process.env.PORT || 3000);
 app.use(bodyparser.urlencoded({extended:false}));
 app.use(bodyparser.json());
 
-// path set using path function(var path) - upblic for html, uploads for file io
+// path set using path function(var path) public for html, uploads for file io
 app.use('/public', static(path.join(__dirname, 'public')));
 
 //set cookieparser as middleware
@@ -44,42 +47,75 @@ var router = express.Router();
 //mongo database midleware import
 var mongoClient = require('mongodb').MongoClient;
 
-//variable database for data object
+//variable for data object
 var database;
+
+//variable for schema and model object
+var UserSchema;
+var UserModel;
 
 // connectDB functin delclaered for connect mongodb(ip:port/directory)
 function connectDB()
 {
     
-    mongoClient.connect('mongodb://localhost:27017',{useUnifiedTopology:true},function(err,client){
-        if(err)
-            throw err;
-        
-        database = client.db('local');
-    })
+    console.log('try to connect database');
+    mongoose.Promise = global.Promise;
+    mongoose.connect('mongodb://localhost:27017/local')
+    database = mongoose.connection;
+    database.on('error', console.error.bind(console, 'mongoose connection error.'));
+    database.on('open', function(){
+        console.log('your database has been connected');
+        UserSchema = mongoose.Schema({
+            id:{type : String, required : true, unique : true},
+            name:{type : String, indes : 'hashed'},
+            password:{type : String, required : true},
+            age : {type : Number, 'default' : -1},
+            created_at : {type : Date, index : {unique : false}, 'default' : Date.now},
+            updated_at : {type : Date, index : {unique : false}, 'default' : Date.now}
+        });
+        console.log('schema has been defined');
+        UserSchema.static('findById', function(id, callback){
+            return this.find({id : id}, callback);
+        });
+
+        UserSchema.static('findAll', function(callback){
+            return this.find({}, callback);
+        });
+        console.log('UserSchem defined complete');    
+        UserModel = mongoose.model("user",UserSchema);
+        console.log('usermodel has been defined')
+    });
+    database.on('dcsconnected', function(){
+        console.log('your database connection has been failed retry after 5 second');
+        setInterval(connectDB, 5000);
+    });
 }
 
 //authorization function that depend on database 
-var authUser = function(database, id, password, callback)
-{
-    var users = database.collection('users');
-    users.find(
-    {
-        "id" : id,
-        "password" : password
-    }).toArray(function(err,docs){
+var authUser = function(database, id, password, callback){
+    console.log("authUser function has been called");
+    
+    UserModel.findById(id,function(err, result){
         if(err){
-        callback(err, null);
-        return;
+            callback(err, null);
+            return;
         }
-        if(docs.length>0)
-            {
-                console.log('searching for mathing : id [%s], pwd[%s]',id,password);
-                callback(null,docs);
-            }
-        else
-        {
-            console.log('can not find matching information');
+        
+        console.log('searching ID keyword : ' + id);
+        console.dir(result);
+        
+        if(result.length > 0){
+            console.log('ID correct');
+            
+        if(result[0]._doc.password == password){
+            console.log('password correct');
+            callback(null, result);
+        }else{
+            console.log('password incorrect');
+            callback(null,null);
+        }
+    }else{
+            console.log('none information matching');
             callback(null,null);
         }
     });
@@ -91,23 +127,24 @@ app.use('/', router);
 // when requesting process/login route, respond log and got ID/Password
 router.route('/process/login').post(function(req,res){
     console.log('/process/login router has been called');
+    
     var paramId = req.body.id||req.query.id;
     var paramPassword = req.body.password||req.query.password;
-    
-    if(database){
-        authUser(database, paramId, paramPassword, function(err, docs){
-        if(err)
-        {throw err;}
-        if (docs){
-            console.dir(docs);
-            var username = docs[0].name;
+    if(database){authUser(database, paramId, paramPassword, function(err, result){
+        if(err){
+            throw err;
+        }
+        console.log("function result : " + result);
+        if (result){
             res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
             res.write('<h1>login succesful</h1>');
             res.write('<div><p>param id: '+ paramId +'</p></div>');
             res.write('<div><p>param password: '+paramPassword+'</p></div>');
             res.write("<br><br><a href='/public/login.html'> go to login page </a>");
             res.end();
-        }else{
+        }
+        else{
+            console.dir("im not here!");
             res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
             res.write('<h1>login failed</h1>');
             res.write('<div><p>param id: '+ paramId +'</p></div>');
@@ -115,6 +152,7 @@ router.route('/process/login').post(function(req,res){
             res.write("<br><br><a href='/public/login.html'> go to login page </a>");
             res.end();  
         }
+
     });
 }else{
         res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
@@ -124,28 +162,19 @@ router.route('/process/login').post(function(req,res){
     }
 });
 
-// adding user function depend on database that input information from users.insert(id, password, name), if there is error, throw it with callback function
+// adding user function depend on database that input information from users.insert(id, password), if there is error, throw it with callback function
 var addUser = function(database, id, password, name, callback){
-
-    console.log('addUser functin has been called, req : ' + id + ',' + password + ',' + name);
-    var users = database.collection('users');
-    
-    users.insertMany([{"id" : id,
+    console.log('addUser function has been called, reqesting : ' + id + ',' + password);
+    var user = UserModel({"id" : id,
                       "password" : password,
-                      "name" : name}],
-                    function(err, result)
-                    {
-        
+                      "name" : name});
+    user.save(function(err){
         if(err){
             callback(err, null);
             return;
-        }
-        if(result.insertedCount > 0){
-            console.log('user information has beed added, added information : ' + result.insertedCount);
-        }else{
-            console.log('none added information.');
-        }
-        callback(null, result);
+        };
+        console.log('user information has beed added, added information : ' + id + ',' + password);
+        callback(null, user);
     });
 }
 
@@ -183,6 +212,42 @@ router.route('/process/adduser').post(function(req,res){
         res.write('<div><p>database is not online</p></div>');
         res.end();
 }    
+});
+
+router.route('/process/listuser').post(function(req,res){
+    console.log('/process/listuser function has been called');
+    
+    if(database){
+        UserModel.findAll(function(err,result){
+            if(err){
+                console.log('error occured while user list opening');
+                res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
+                res.write('<h2>user list opening failed</h2>');
+                res.write('<p>' + err.stack + '</p>');
+                res.end();
+                return;
+            }if(result){
+                console.log(result);
+                res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
+                res.write('<h2>user list opening</h2>');
+                res.write('<div><ul>');
+                
+                for(var i = 0; i<result.length;i++){
+                    var curId = result[i]._doc.id;
+                    var curName = result[i]._doc.name;
+                    res.write('<li>#' + i + ' : ' + curId + ',' + curName + '</li>');
+                }
+                
+                res.write('</ul></div>');
+                res.end();
+            }
+        });
+    }else{
+        res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
+        res.write('<h1>database connection failed</h1>');
+        res.write('<div><p>database is not online</p></div>');
+        res.end();
+        } 
 });
 
 
