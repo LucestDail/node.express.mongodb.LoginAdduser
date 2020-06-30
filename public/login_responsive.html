@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 		
-		<title>사용자 추가</title>
+		<title>로그인</title>
 		
 		<link href="./semantic.min.css" rel="stylesheet" >
 
@@ -37,7 +37,7 @@
 			}
 
 			#cardbox {
-				width:90%;
+				width:70%;
 			}
 
 			#iconImage {
@@ -52,7 +52,6 @@
 			
 			#contentsText {
 				color:#999;
-				
 			}
 			
 			#form1 {
@@ -75,11 +74,34 @@
 				padding-top:0.6em;
 				text-align:right;
 			}
+			
+			@media screen and (min-width: 320px) and (max-width: 768px) {
+  				#cardbox {
+					width:90%;
+				}
+				
+				label[id=contentsText] {
+					display:none;
+				}
+			}
+			
+			@media screen and (min-width: 768px) and (max-width: 979px) {
+  				#cardbox {
+					width:80%;
+				}
+			}
+			
 		</style>
 		
 		<script src="./jquery-3.1.1.min.js"></script>
 		<script src="./semantic.min.js"></script>
-
+		<script>
+			$(function() {
+				$('.ui.checkbox').checkbox();
+			});
+		</script>
+		
+		
 	</head>
 	<body>
 
@@ -91,14 +113,14 @@
 				 		<img id="iconImage" class="ui avatar image" src="./images/author.png">
 					</div>
 					<div>
-						<div id="titleText" class="header">사용자 추가</div>
+						<div id="titleText" class="header">로그인</div>
 	   					<div id="contentsText" class="description">
-					       	정보를 입력하고 [추가] 버튼을 누르세요.
+					       	아이디와 비밀번호를 입력하고 로그인하세요.
 					    </div>
 					</div>
 				 </div>
 			
-				<form id="form1" method="post" action="/process/adduser">
+				<form id="form1" method="post" action="/process/login">
 					<table>
 						<tr class="row">
 							<td class="col1"><label id="contentsText">아이디</label></td>
@@ -118,20 +140,15 @@
 							</td>
 							<td></td>
 						</tr>
-						<tr class="row">
-							<td class="col1"><label id="contentsText">사용자명</label></td>
-							<td class="col2" colspan="2">
-								<div class="ui input">
-									<input class="inputbox" type="text" name="name" />
-								</div>
-							</td>
-							<td></td>
-						</tr>
 						<tr valign="baseline">
 							<td></td>
 							<td>
+								<div class="ui toggle checkbox">
+									<input type="checkbox" name="saveOption">
+									<label>아이디 저장</label>
+								</div>
 							</td>
-							<td id="buttonContainer" align="right"><input id="submitButton" class="ui primary button" type="submit" value="추가" name="" /></td>
+							<td id="buttonContainer" align="right"><input id="submitButton" class="ui primary button" type="submit" value="로그인" name="" /></td>
 						</tr>
 					</table>
 					

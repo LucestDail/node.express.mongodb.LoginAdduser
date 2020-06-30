@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset = "utf-8">
+        <title> List User PAGE</title>
+    </head>
+    <body>
+    <h1>List Usser</h1>
+        <div>
+            <ul>
+                <% for(var i = 0; i<result.length;i++){
+                    var curId = result[i]._doc.id;
+                    var curName = result[i]._doc.name; %>
+                    <li>#<%=i %> - ID : <%=curId  %>, name : <%=curName %></li>
+                <% } %>
+            </ul>
+        </div>
+        <br><br><a href='/public/login.html'>request again</a>
+    </body>
+</html>

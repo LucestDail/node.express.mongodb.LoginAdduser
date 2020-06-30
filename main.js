@@ -20,6 +20,9 @@ var config = require('./config');
 var route_loader = require('./route');
 var database_loader = require('./database');
 var mongoose = require('mongoose');
+app.set('views', __dirname + '/views');
+app.set('view engine','ejs');
+console.log('view module has been setted');
 //set port env, or 3000
 app.set('port', process.env.PORT || config.server_port); 
 //set body-parser as middleware

@@ -15,25 +15,42 @@ var login = function(req, res){
     var paramId = req.body.id||req.query.id;
     var paramPassword = req.body.password||req.query.password;
     console.log('requesting parameter : ' + paramId + ', ' + paramPassword);
-    if(database){
+    if(database.db){
         authUser(database,
                  paramId,
                  paramPassword,
                  function(err, result){
             if(err){
-                callback(err,null);
-                console.error(err);
+                console.error('user login error occured : ' + err.stack);
+                res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
+                res.write('<h2>user login error occured Occured</h2>');
+                res.write('<h>' + err.stack + '</p>');
+                res.end();
                 return;
             }
         console.log("function result : " + result);
         if (result){
+            //print authUser return result
+            console.dir(result);
+            
             var username = result[0].name;
+            
             res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
-            res.write('<h1>login succesful</h1>');
-            res.write('<div><p>param id: '+ paramId +'</p></div>');
-            res.write('<div><p>param password: '+paramPassword+'</p></div>');
-            res.write("<br><br><a href='/public/login.html'> go to login page </a>");
-            res.end();
+            //read view file and rendering
+            
+            var context = {userid:paramId, username:username};
+            req.app.render('login_success',context,function(err,html){
+                if(err){
+                    console.error("rendering err : " + err.stack);
+                    res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
+                    res.write('<h2>view rendering Error Occured</h2>');
+                    res.write('<h>' + err.stack + '</p>');
+                    res.end();
+                    return;
+                }
+                console.log('rendered : ' + html);
+                res.end(html);
+            });
         }
         else{
             console.dir("im not here!");
@@ -41,7 +58,7 @@ var login = function(req, res){
             res.write('<h1>login failed</h1>');
             res.write('<div><p>param id: '+ paramId +'</p></div>');
             res.write('<div><p>param password: '+paramPassword+'</p></div>');
-            res.write("<br><br><a href='/public/login.html'> go to login page </a>");
+            res.write("<br><br><a href='/public/login_responsive.html'> go to login page </a>");
             res.end();  
         }
 
@@ -61,27 +78,39 @@ var adduser = function(req, res){
     var paramPassword = req.body.password||req.query.password;
     var paramName = req.body.name||req.query.name;
     console.log('requesting value :' + paramId + ',' + paramPassword + ',' + paramName);
-    if(database){
+    if(database.db){
         addUser(database,
                 paramId,
                 paramPassword,
                 paramName,
                 function(err,result){
             if(err){
-                callback(err,null);
-                console.error(err);
+                console.error("err : " + err.stack);
+                res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
+                res.write('<h>' + err.stack + '</p>');
+                res.end();
                 return;
             }
             if(result){
                 console.dir(result);
-                res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
-                res.write('<h1>adding process succesful</h1>');
-                res.write("<br><br><a href='/public/login.html'> go to login page </a>");
-                res.end();
+                var context = {title:'add process success!'};
+                req.app.render('adduser',context,function(err,html){
+                    if(err){
+                        console.error("rendering err : " + err.stack);
+                        res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
+                        res.write('<h2>view rendering Error Occured</h2>');
+                        res.write('<p>' + err.stack + '</p>');
+                        res.end();
+                        return;
+                    }
+                    res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
+                    console.log("rendered : " + html);
+                    res.end(html);
+                }); 
             }else{
                 res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
                 res.write('<h1>adding process failed</h1>');
-                res.write("<br><br><a href='/public/login.html'> go to login page </a>");
+                res.write("<br><br><a href='/public/login_responsive.html'> go to login page </a>");
                 res.end();
             }
         })
@@ -105,17 +134,24 @@ var listuser = function(req, res){
                 return;
             }
             if(result){
+                //print authUser return result
                 console.dir(result);
-                res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
-                res.write('<h2>user list opening</h2>');
-                res.write('<div><ul>');
-                for(var i = 0; i<result.length;i++){
-                    var curId = result[i]._doc.id;
-                    var curName = result[i]._doc.name;
-                    res.write('    <li>#' + i + ' : ' + curId + ', ' + curName + '</li>');
-                }
-                res.write('</ul></div>');
-                res.end();
+                //read view file and rendering
+                var context = {result:result};
+                req.app.render('listuser',context,function(err,html){
+                    if(err){
+                        console.error("rendering err : " + err.stack);
+                        res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
+                        res.write('<h2>view rendering Error Occured</h2>');
+                        res.write('<h>' + err.stack + '</p>');
+                        res.end();
+                        return;
+                    }
+                    res.writeHead('200',{'Content-type':'text/html;charset=utf8'});
+                    
+                    console.log('rendered : ' + html);
+                    res.end(html);
+                }); 
             } else {
 				res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
 				res.write('<h2>failed to opening user list</h2>');
@@ -140,7 +176,8 @@ var addUser = function(database, id, password, name, callback){
         "name" : name});
     user.save(function(err,result){
         if(err){
-            callback(err, null);
+            callback(err,null);
+            console.error(err);
             return;
         };
         console.log('user information has beed added, added information');

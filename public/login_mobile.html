@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 		
-		<title>사용자 리스트</title>
+		<title>로그인</title>
 		
 		<link href="./semantic.min.css" rel="stylesheet" >
 
@@ -37,7 +37,7 @@
 			}
 
 			#cardbox {
-				width:70%;
+				width:90%;
 			}
 
 			#iconImage {
@@ -56,27 +56,35 @@
 			
 			#form1 {
 				padding:1em;
-				width:100%;
-			}
-			
-			table {
-				width:100%;
 			}
 			
 			.row {
 				height:3em;
-				width:100%;
+			}
+			
+			.col1 {
+				width:5em;
+			}
+			 
+			.inputbox {
+				width:20em;
 			}
 			
 			#buttonContainer {
 				padding-top:0.6em;
-				text-align:center;
+				text-align:right;
 			}
 		</style>
 		
 		<script src="./jquery-3.1.1.min.js"></script>
 		<script src="./semantic.min.js"></script>
- 
+		<script>
+			$(function() {
+				$('.ui.checkbox').checkbox();
+			});
+		</script>
+		
+		
 	</head>
 	<body>
 
@@ -88,19 +96,45 @@
 				 		<img id="iconImage" class="ui avatar image" src="./images/author.png">
 					</div>
 					<div>
-						<div id="titleText" class="header">사용자 리스트</div>
+						<div id="titleText" class="header">로그인</div>
 	   					<div id="contentsText" class="description">
-					       	아래 [조회] 버튼을 누르세요.
+					       	아이디와 비밀번호를 입력하고 로그인하세요.
 					    </div>
 					</div>
 				 </div>
 			
-				<form id="form1" method="post" action="/process/listuser">
+				<form id="form1" method="post" action="/process/login">
 					<table>
-						<tr class="row" align="center" valign="middle">
-							<td id="buttonContainer"><input id="submitButton" class="ui primary button" type="submit" value="조회" name="" /></td>
+						<tr class="row">
+							<td class="col1"></td>
+							<td class="col2" colspan="2">
+								<div class="ui input">
+									<input class="inputbox" type="text" placeholder="아이디 입력" name="id" />
+								</div>
+							</td>
+							<td></td>
+						</tr>
+						<tr class="row">
+							<td class="col1"></td>
+							<td class="col2" colspan="2">
+								<div class="ui input">
+									<input class="inputbox" type="password" placeholder="패스워드 입력" name="password" />
+								</div>
+							</td>
+							<td></td>
+						</tr>
+						<tr valign="baseline">
+							<td></td>
+							<td>
+								<div class="ui toggle checkbox">
+									<input type="checkbox" name="saveOption">
+									<label>아이디 저장</label>
+								</div>
+							</td>
+							<td id="buttonContainer" align="right"><input id="submitButton" class="ui primary button" type="submit" value="로그인" name="" /></td>
 						</tr>
 					</table>
+					
 				</form>
 				 
 			</div>

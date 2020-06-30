@@ -88,17 +88,21 @@
 				 		<img id="iconImage" class="ui avatar image" src="./images/author.png">
 					</div>
 					<div>
-						<div id="titleText" class="header">사용자 리스트</div>
+						<div id="titleText" class="header">로그인 응답</div>
 	   					<div id="contentsText" class="description">
-					       	아래 [조회] 버튼을 누르세요.
+					       	<p>로그인 성공</p>
+					       	<br>
+					       	<div><p>사용자 아이디 : test01</p></div>
+							<br>
+							<div><p>사용자 이름 : 소녀시대</p></div>
 					    </div>
 					</div>
 				 </div>
 			
-				<form id="form1" method="post" action="/process/listuser">
+				<form id="form1" method="post" action="/public/login_responsive.html">
 					<table>
 						<tr class="row" align="center" valign="middle">
-							<td id="buttonContainer"><input id="submitButton" class="ui primary button" type="submit" value="조회" name="" /></td>
+							<td id="buttonContainer"><input id="submitButton" class="ui primary button" type="submit" value="다시 로그인하기" name="" /></td>
 						</tr>
 					</table>
 				</form>

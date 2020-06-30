@@ -49,7 +49,7 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
 </pre></h3>
 <h3><pre>
 4. Code Status
-    4-1. 2020. 6. 25 19:05(KR)
+    4-1. 2020. 6. 25. 19:05(KR)
         4-1-1. Modification.
                 A. Function about authorization and db contact for checkout list(who use adduse function)
     4-2. 2020. 6. 26 16:20(KR)
@@ -65,10 +65,10 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
                 none.
         4-2-4. ETC
                 A. NPM updated(6.14.4 -> 6.14.5)
-    4-3. 2020. 6. 29 14:45(KR)
+    4-3. 2020. 6. 29. 14:45(KR)
         4-3-1. Modifiy 
-                A. Change main frame code name(signup -> main) because it works for main utility
-                B. Change main frame code which modulate for modify more easily when ERROR occured
+                A. Change main code name(signup -> main) because it works for main utility
+                B. Change main code which modulate for modify more easily when ERROR occured
         4-3-2. Add
                 A. Adding modulated code(user_schema, user, route, database, config)
                     - user_schema : create default user schema for database and hashing password security
@@ -77,6 +77,22 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
                     - database : connect database an set data about mongoose data utility
                     - config : setting basic set for connection
                 B. Adding 404 html Page for error-handling
+        4-3-3. Remove
+                none.
+        4-3-4. ETC
+                none.
+    4-3. 2020. 6. 30. 12:10(KR)
+        4-3-1. Modifiy 
+                A. Change user code for using ejs code main utility
+                B. Change main code ejs module for using ejs module and set file path
+        4-3-2. Add
+                A. view module ejs code(adduser(head,footer), listuser, login_success)
+                    - adduser : print when add route/addUser functon finished well
+                    - head : head ejs html file for adduser.ejs
+                    - footer : foot ejs html file for adduser.ejs
+                    - listuser : print listuser functin
+                    - login_success : print when login route/authUser function finsihed well
+                B. view files for saving ejs files
         4-3-3. Remove
                 none.
         4-3-4. ETC
