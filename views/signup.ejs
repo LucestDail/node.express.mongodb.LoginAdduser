@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+		<title>Create Account Page</title>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    	<style>
+        	body { padding-top:80px; }
+			@font-face {
+				font-family: 'Nanum Gothic'; font-style: normal; font-weight: 400;
+				src: url('../public/NanumGothic-Regular.eot');
+				src: local('NanumGothic'),
+					url('../public/NanumGothic-Regular.eot?#iefix') format('embedded-opentype'),
+					url('../public/NanumGothic-Regular.woff2') format('woff2'),
+					url('../public/NanumGothic-Regular.woff') format('woff'),
+					url('../public/NanumGothic-Regular.ttf') format('truetype');
+			}
+        	h1, p, a { font-family: 'Nanum Gothic' }
+    	</style> 
+	</head>
+	<body>
+		<div class="container">				
+			<div class="col-sm-6 col-sm-offset-3">
+			    <h1><span class="fa fa-sign-in"></span> Create Account</h1>
+						    <% if (message.length > 0) { %>
+			        <div class="alert alert-danger"><%= message %></div>
+			    <% } %>
+			    <form action="/signup" method="post" >
+			        <div class="form-group">
+			            <label>Email</label>
+			            <input type="text" class="form-control" name="email">
+			        </div>
+			        <div class="form-group">
+			            <label>password</label>
+			            <input type="password" class="form-control" name="password">
+			        </div>
+			        <div class="form-group">
+			            <label>nickname</label>
+			            <input type="text" class="form-control" name="name">
+			        </div>
+			
+			        <button type="submit" class="btn btn-warning btn-lg">create account</button>
+			    </form>
+			    <hr>
+			    <p>already have account? <a href="/login">Login</a></p>
+			    <p><a href="/">go to home</a>.</p>
+			</div>
+		</div>		
+	</body>
+</html>

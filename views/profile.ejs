@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+		<title>Profile Page</title>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    	<style>
+        	body { padding-top:80px; }
+			@font-face {
+				font-family: 'Nanum Gothic'; font-style: normal; font-weight: 400;
+				src: url('../public/NanumGothic-Regular.eot');
+				src: local('NanumGothic'),
+					url('../public/NanumGothic-Regular.eot?#iefix') format('embedded-opentype'),
+					url('../public/NanumGothic-Regular.woff2') format('woff2'),
+					url('../public/NanumGothic-Regular.woff') format('woff'),
+					url('../public/NanumGothic-Regular.ttf') format('truetype');
+			}
+        	h1, p, a { font-family: 'Nanum Gothic' }
+    	</style>
+	</head>
+	<body>
+		<div class="container">						
+			<div class="page-header text-center">
+		        <h1><span class="fa fa-book"></span> User Profile</h1>
+		        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+		    </div>
+			<br>
+		    <div class="row">
+		        <div class="col-sm-6">
+		            <div class="well">
+		                <h3><span class="fa fa-user"></span> Local Profile Information</h3>
+						<br>
+						<p>
+		                	<strong>Email</strong>: <%= user.email %>
+		                	<br><br>
+		                	<strong>nickname</strong>: <%= user.name %>
+		                </p>
+						<br>
+		            </div>
+		        </div>
+		    </div>
+		</div>	
+	</body>
+</html>

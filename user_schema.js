@@ -5,12 +5,11 @@ var Schema = {};
 
 Schema.createSchema = function(mongoose){
     //make schema
-    UserSchema = mongoose.Schema({
-        id:{type : String, required : true, unique : true, 'default' : ''},
+    var UserSchema = mongoose.Schema({
+        email:{type : String, 'default' : ''},
         hashed_password : {type : String, required : true, 'default' : ''},
         salt:{type : String, required : true},
         name:{type : String, index : 'hashed', 'default' : ''},
-        age : {type : Number, 'default' : -1},
         created_at : {type : Date, index : {unique : false}, 'default' : Date.now},
         updated_at : {type : Date, index : {unique : false}, 'default' : Date.now}
     });
@@ -71,9 +70,9 @@ Schema.createSchema = function(mongoose){
 			next();
 		}
 	})    
-    UserSchema.path('id').validate(function(id){
-        return id.length;
-    }, 'id column value is not exist');
+    UserSchema.path('email').validate(function(email){
+        return email.length;
+    }, 'email column value is not exist');
     
     UserSchema.path('name').validate(function(name){
         return name.length;
@@ -83,8 +82,8 @@ Schema.createSchema = function(mongoose){
         return hashed_password.length;
     }, 'hashed_password column value is not exist');
     
-    UserSchema.static('findById', function(id, callback){
-        return this.find({id : id}, callback);
+    UserSchema.static('findByEmail', function(email, callback){
+        return this.find({email : email}, callback);
     });
     
     UserSchema.static('findAll', function(callback){
