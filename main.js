@@ -20,6 +20,7 @@ var config = require('./config');
 var route_loader = require('./route');
 var database_loader = require('./database');
 var mongoose = require('mongoose');
+//passport and flash module import
 var passport = require('passport');
 var flash = require('connect-flash');
 app.set('views', __dirname + '/views');
@@ -40,60 +41,109 @@ app.use(expressSession({
     resave: true,
     saveUninitialized: true
 }));
+//use passport as middleware. befor using, initialization
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-var database;
-var UserSchema;
-var UserModel;
-// make object about use database schema and model
-function createUserSchema(database){
-    database.UserSchema = require('./user_schema').createSchema(mongoose);
-    user.init(database, UserSchema, UserModel);
-    database.UserModel = mongoose.model("user10",database.UserSchema);
-    console.log('usermodel has been defined as user10')
-}
 
+//router module depend on route.js
+var router = express.Router();
+route_loader.init(app, router);
+
+router.route('/').get(function(req,res){
+    console.log('/ path has been called');
+    res.render('index.ejs');
+});
+
+router.route('/login').get(function(req, res) {
+    console.log('/login path has been called');
+    res.render('login.ejs',{message : req.flash('loginMessage')});
+});
+
+router.route('/login').post(passport.authenticate('local-login', {
+    successRedirect : '/profile',
+    failureRedirect : '/login',
+    failureFlash : true
+}));
+
+router.route('/signup').get(function(req, res) {
+    console.log('/signup path has been called');
+    res.render('signup.ejs',{message : req.flash('signupMessage')});
+});
+
+router.route('/signup').post(passport.authenticate('local-signup', {
+    successRedirect : '/profile', 
+    failureRedirect : '/signup', 
+    failureFlash : true 
+}));
+
+router.route('/profile').get(function(req,res){
+    console.log('/profile path has been called');
+    console.log('req.user object value : ');
+    console.dir(req.user);
+    if(!req.user){
+        console.log('none authenticated user');
+        res.redirect('/');
+        return;
+    }
+    
+    console.log('authenticated user');
+    if(Array.isArray(req.user)){
+        res.render('profile.ejs', {user : req.user[0]._doc});
+    }else{
+        res.render('profile.ejs',{user:req.user});
+    }
+});
+
+router.route('/logout').get(function(req, res) {
+    console.log('/logout path has been called');
+    req.logout();
+    res.redirect('/');
+});
+
+//passport-local module import as middleware
 var LocalStrategy = require('passport-local').Strategy;
+
+//setting local-login
 passport.use('local-login', new LocalStrategy({
     usernameField : 'email',
     passwordField : 'password',
     passReqToCallback : true
-    }, function(req, email, password, donw){
+    }, function(req, email, password, done){
     console.log('passport local-login function has been called : ' + email + ',' + password);
     
     var database = app.get('database');
     database.UserModel.findOne({'email' : email}, function(err,user){
+        // if error occured, return done as err
         if(err){
             return done(err);
         }
+        // if user is not correct, return flash message
         if(!user){
             console.log('account is not correct');
-            return done(null, flase, req.flash('loginMessage', 'there is no registed account'));
+            return done(null, false, req.flash('loginMessage', 'there is no registed account'));
         }
+        //if password is not correct, return flash message
         var authenticated = user.authenticate(password, user._doc.salt, user._doc.hashed_password);
         if(!authenticated){
             console.log('password is not correct');
             return done(null, false, req.flash('loginMessage', 'you password is not correct'));
         }
-        
         console.log('account and password has been correct');
         return done(null, user);
     });
 }));
 
 
-passport.use('local-singup', new LocalStrategy({
+passport.use('local-signup', new LocalStrategy({
     usernameField : 'email',
     passwordField : 'password',
     passReqToCallback : true
-    }, function(req, email, password, donw){
+    }, function(req, email, password, done){
     var paramName = req.body.name || req.query.name;
     console.log('local signup function has been called : ' + email + ',' + password + ',' + paramName);
-    
     process.nextTick(function(){
-        
         var database = app.get('database');
         database.UserModel.findOne({'email' : email}, function(err,user){
             if(err){
@@ -101,14 +151,13 @@ passport.use('local-singup', new LocalStrategy({
             }
             if(user){
                 console.log('you already have account');
-                return done(null,false, req.flash('singupMessage', 'you alread have account'));
+                return done(null,false, req.flash('signupMessage', 'you alread have account'));
             }else{
-                var user =new database.UserModel({'email' : email, 'password' : password, 'name' : paramName});
+                var user = new database.UserModel({'email' : email, 'password' : password, 'name' : paramName});
                 user.save(function(err){
                     if(err){
                         throw(err);
                     }
-                    
                     console.log('user data has been added');
                     return done(null, user);
                 });
@@ -130,61 +179,6 @@ passport.deserializeUser(function(user, done){
     done(null, user);
 })
 
-//router module depend on route.js
-var router = express.Router();
-route_loader.init(app, express.Router());
-
-router.route('/').get(function(req,res){
-    console.log('/ path has been called');
-    res.render('index.ejs');
-});
-
-router.route('/profile').get(function(req,res){
-    console.log('/profile path has been called');
-    console.log('re.user object value : ' + req.user);
-    
-    if(!req,user){
-        consle.log('none authenticated user');
-        res.redirect('/');
-        return;
-    }
-    
-    console.log('authenticated user');
-    if(Array.isArray(req.user)){
-        res.render('profile.ejs', {user : req.user[0]._doc});
-    }else{
-        res.render('profile.ejs',{user:req.user});
-    }
-});
-
-app.get('/login', function(req,res){
-    console.log('/login path has been called');
-    res.render('login.ejs',{message : req.flash('loginMessage')});
-});
-
-app.post('./login', passport.authenticate('local-login',{
-    successRedirect : '/profile',
-    failureRedirect : '/login',
-    failureFlash : true
-}));
-
-app.get('/signup', function(req,res){
-    console.log('/signup path has been called');
-    res.render('signup.ejs',{message : req.flash('signupMessage')});
-});
-
-app.post('./signup', passport.authenticate('local-signup',{
-    successRedirect : '/profile',
-    failureRedirect : '/signup',
-    failureFlash : true
-}));
-
-app.get('/logout', function(req,res){
-    console.log('/logout path has been called');
-    req.logout();
-    res.redirect('/');
-});
-
 // error handling function, module importing, use it as middleware when httperror 404 happened, outprint 404.html
 var errorHandler = expressErrorHandler({
     static:
@@ -195,6 +189,14 @@ var errorHandler = expressErrorHandler({
 app.use(expressErrorHandler.httpError(404));
 app.use(errorHandler);
 
+//if uncaughtException occured, server process maintain
+process.on('uncaughtException', function (err) {
+	console.log('uncaughtException 발생함 : ' + err);
+	console.log('서버 프로세스 종료하지 않고 유지함.');
+	
+	console.log(err.stack);
+});
+
 //signal handler => close express server when process terminated
 process.on('SIGTERM', function () {
     console.log("process has been terminated, your express module turn off");
@@ -203,8 +205,8 @@ process.on('SIGTERM', function () {
 //express handler => close express module dependable app module when app got signal(close)
 app.on('close', function () {
 	console.log("express app module has been turned off. disconnect you database now");
-	if (database) {
-		database.close();
+	if (database.db) {
+		database.db.close();
 	}
 });
 

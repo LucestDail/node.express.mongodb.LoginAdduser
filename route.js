@@ -9,6 +9,8 @@ route.init = function(app, router){
 }
 
 function initRoutes(app, router){
+    
+    var infoLen = config.route_info.length;
     console.log('initRoutes function has been called');
     
     for (var i=0; i< config.route_info.length; i++){

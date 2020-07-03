@@ -2,13 +2,14 @@ var database;
 var UserSchema;
 var UserModel;
 
+/*
 var init = function(db, schema, model){
     console.log('init function has beed called');
     database = db;
     UserSchema = schema;
     UserModel = model;
 }
-
+*/
 var login = function(req, res){
     console.log("login function has been called");
     var database = req.app.get('database');
@@ -217,7 +218,9 @@ var authUser = function(database, id, password, callback){
         }
     });
 }
-module.exports.init = init;
+
+
+//module.exports.init = init;
 module.exports.login = login;
 module.exports.adduser = adduser;
 module.exports.listuser = listuser;

@@ -97,12 +97,22 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
                 none.
         4-3-4. ETC
                 none.
-    4-3. 2020. 7. 2. 20:30(KR)
+    4-4. 2020. 7. 2. 20:30(KR)
         4-3-1. Modifiy 
                 A. Change user code for using passport module
         4-3-2. Add
                 A. Add passport module(but it is not work now, gonna fix)
                 B. Add ejs file(signup, index, profile)
+        4-3-3. Remove
+                none.
+        4-3-4. ETC
+                none.
+    4-5. 2020. 7. 3. 09:40(KR)
+        4-3-1. Modifiy 
+                A. Change main code for using passport(stabilize for connecting ejs and javascript)
+                B. Change main code router(not app module dependency, use router module for acting user process)
+        4-3-2. Add
+                none.
         4-3-3. Remove
                 none.
         4-3-4. ETC

@@ -73,10 +73,6 @@ Schema.createSchema = function(mongoose){
     UserSchema.path('email').validate(function(email){
         return email.length;
     }, 'email column value is not exist');
-    
-    UserSchema.path('name').validate(function(name){
-        return name.length;
-    }, 'name column value is not exist');
   
     UserSchema.path('hashed_password').validate(function (hashed_password) {
         return hashed_password.length;
