@@ -3,7 +3,7 @@ module.exports = {
     db_url : 'mongodb://localhost:27017/local',
     db_schemas : [{
     file : './user_schema',
-    collection : 'user100',
+    collection : 'user1000',
     schemaName : 'UserSchema',
     modelName : 'UserModel'
 }],
@@ -14,4 +14,21 @@ module.exports = {
         {file : './user', path : '/process/listuser', method : 'listuser', type : 'post'}
     */
     ]
+    ,facebook: {		// passport facebook
+		clientID: '277904173465784',
+		clientSecret: '7d274ca83f4de1fa3e8d5b5aa62616c0',
+		callbackURL: 'http://localhost:3000/auth/facebook/callback'
+	}
+    /*
+    ,twitter: {		// passport twitter
+		clientID: 'id',
+		clientSecret: 'secret',
+		callbackURL: '/auth/twitter/callback'
+	},
+	google: {		// passport google
+		clientID: 'id',
+		clientSecret: 'secret',
+		callbackURL: '/auth/google/callback'
+	}
+    */
 }

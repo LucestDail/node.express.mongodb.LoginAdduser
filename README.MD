@@ -61,9 +61,7 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
                 I do want to make sure what hash is and want to build safe signup process as much as i can. So i think password is not safe while signup process so it gonna be made up virtual object and when hashing is over, then it save
                 B. Encrytion function have added.
                 This time, i try hashing algorithm using SHA1 and it is One-way Encryption because i want to make it sure safety.
-        4-2-3. Remove
-                none.
-        4-2-4. ETC
+        4-2-3. ETC
                 A. NPM updated(6.14.4 -> 6.14.5)
     4-3. 2020. 6. 29. 14:45(KR)
         4-3-1. Modifiy 
@@ -77,15 +75,11 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
                     - database : connect database an set data about mongoose data utility
                     - config : setting basic set for connection
                 B. Adding 404 html Page for error-handling
-        4-3-3. Remove
-                none.
-        4-3-4. ETC
-                none.
-    4-3. 2020. 6. 30. 12:10(KR)
-        4-3-1. Modifiy 
+    4-4. 2020. 6. 30. 12:10(KR)
+        4-4-1. Modifiy 
                 A. Change user code for using ejs code main utility
                 B. Change main code ejs module for using ejs module and set file path
-        4-3-2. Add
+        4-4-2. Add
                 A. view module ejs code(adduser(head,footer), listuser, login_success)
                     - adduser : print when add route/addUser functon finished well
                     - head : head ejs html file for adduser.ejs
@@ -93,30 +87,24 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
                     - listuser : print listuser functin
                     - login_success : print when login route/authUser function finsihed well
                 B. view files for saving ejs files
-        4-3-3. Remove
-                none.
-        4-3-4. ETC
-                none.
-    4-4. 2020. 7. 2. 20:30(KR)
-        4-3-1. Modifiy 
+    4-5. 2020. 7. 2. 20:30(KR)
+        4-5-1. Modifiy 
                 A. Change user code for using passport module
-        4-3-2. Add
+        4-5-2. Add
                 A. Add passport module(but it is not work now, gonna fix)
                 B. Add ejs file(signup, index, profile)
-        4-3-3. Remove
-                none.
-        4-3-4. ETC
-                none.
-    4-5. 2020. 7. 3. 09:40(KR)
-        4-3-1. Modifiy 
+    4-6. 2020. 7. 3. 09:40(KR)
+        4-6-1. Modifiy 
                 A. Change main code for using passport(stabilize for connecting ejs and javascript)
                 B. Change main code router(not app module dependency, use router module for acting user process)
-        4-3-2. Add
-                none.
-        4-3-3. Remove
-                none.
-        4-3-4. ETC
-                none.
+    4-7. 2020. 7. 4. 09:40(KR)
+        4-7-1. Modifiy 
+                A. Change main code for modulation
+                B. Change user passport for using passport bia facebook(not work yet)
+        4-7-2. Add
+                A. Add facebook passport module(it is not work yet cause of model creation)
+        4-7-3. Remove
+                A. Remove main code router and added it to config.js and user_passport.js
 </pre></h3>
 <br>
 <h3><pre>

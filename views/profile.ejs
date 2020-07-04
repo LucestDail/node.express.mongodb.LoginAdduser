@@ -30,13 +30,39 @@
 		    <div class="row">
 		        <div class="col-sm-6">
 		            <div class="well">
-		                <h3><span class="fa fa-user"></span> Local Profile Information</h3>
-						<br>
-						<p>
-		                	<strong>Email</strong>: <%= user.email %>
-		                	<br><br>
-		                	<strong>nickname</strong>: <%= user.name %>
-		                </p>
+                        <% if (user.provider == undefined || user.provider == '') { %>
+			                <h3><span class="fa fa-user"></span> Local Profile</h3>
+							<br>
+							<p>
+								<strong>Email</strong>: <%= user.email %><br><br>
+		                		<strong>Name</strong>: <%= user.name %>
+			                </p>
+			            <% } else if (user.provider == 'facebook') { %>
+							<h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook Profile</h3>
+							<br>
+		                    <p>
+		                        <strong>ID</strong>: <%= user.facebook.id %><br><br>
+		                        <strong>EMail</strong>: <%= user.facebook.email %><br><br>
+		                        <strong>Name</strong>: <%= user.facebook.name %>
+		                    </p>
+		                <% } else if (user.provider == 'twitter') { %>
+							<h3 class="text-primary"><span class="fa fa-twitter"></span> Twitter Profile</h3>
+							<br>
+		                    <p>
+		                        <strong>ID</strong>: <%= user.twitter.id %><br><br>
+		                        <strong>EMail</strong>: <%= user.twitter.email %><br><br>
+		                        <strong>Name</strong>: <%= user.twitter.name %>
+		                    </p>
+		                <% } else if (user.provider == 'google') { %>
+							<h3 class="text-primary"><span class="fa fa-google"></span> Google Profile</h3>
+							<br>
+		                    <p>
+		                        <strong>ID</strong>: <%= user.google.id %><br><br>
+		                        <strong>EMail</strong>: <%= user.google.email %><br><br>
+		                        <strong>Name</strong>: <%= user.google.name %>
+		                    </p>
+						<% } %>
+		                	
 						<br>
 		            </div>
 		        </div>

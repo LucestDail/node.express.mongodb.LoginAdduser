@@ -11,7 +11,10 @@ Schema.createSchema = function(mongoose){
         salt:{type : String, required : true},
         name:{type : String, index : 'hashed', 'default' : ''},
         created_at : {type : Date, index : {unique : false}, 'default' : Date.now},
-        updated_at : {type : Date, index : {unique : false}, 'default' : Date.now}
+        updated_at : {type : Date, index : {unique : false}, 'default' : Date.now},
+        provider : {type : String, 'default' : ''},
+        authToken : {type : String, 'default' : ''},
+        facebook : {}
     });
     //virtualization for password
     UserSchema
