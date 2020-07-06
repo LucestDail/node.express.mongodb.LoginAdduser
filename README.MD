@@ -105,6 +105,9 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
                 A. Add facebook passport module(it is not work yet cause of model creation)
         4-7-3. Remove
                 A. Remove main code router and added it to config.js and user_passport.js
+    4-8. 2020. 7. 6. 21:40(KR)
+        4-8-1. ETC
+                A. Passport bia facebook gonna be terminated because cant find why hashed_password path has been activated... 
 </pre></h3>
 <br>
 <h3><pre>
