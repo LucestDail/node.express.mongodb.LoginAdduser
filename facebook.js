@@ -1,3 +1,4 @@
+var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var config = require('./config');
 
@@ -5,17 +6,18 @@ module.exports = function(app, passport) {
 	return new FacebookStrategy({
 		clientID: config.facebook.clientID,
 		clientSecret: config.facebook.clientSecret,
-		callbackURL: config.facebook.callbackURL
+		callbackURL: config.facebook.callbackURL,
+        profileFields:['id','email','displayName']
 	}, function(accessToken, refreshToken, profile, done) {
 		console.log('passport facebook function has been called');
 		console.dir(profile);
-		
+		/*
 		var options = {
-		    criteria: { 'facebook.id': profile.id }
+		    criteria: { 'facebook.emails': profile.emails }
 		};
-		
+		*/
 		var database = app.get('database');
-	    database.UserModel.load(options, function (err, user) {
+	    database.UserModel.findOne({'email ': profile.emails}, function (err, user) {
 			if (err) return done(err);
       
 			if (!user) {

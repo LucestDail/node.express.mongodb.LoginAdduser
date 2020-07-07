@@ -5,17 +5,17 @@ var Schema = {};
 
 Schema.createSchema = function(mongoose){
     //make schema
-    var UserSchema = mongoose.Schema({
-        email:{type : String, 'default' : ''},
-        hashed_password : {type : String, required : true, 'default' : ''},
-        salt:{type : String, required : true},
-        name:{type : String, index : 'hashed', 'default' : ''},
-        created_at : {type : Date, index : {unique : false}, 'default' : Date.now},
-        updated_at : {type : Date, index : {unique : false}, 'default' : Date.now},
-        provider : {type : String, 'default' : ''},
-        authToken : {type : String, 'default' : ''},
-        facebook : {}
-    });
+	var UserSchema = mongoose.Schema({
+		email: {type: String, 'default':''}
+	    , hashed_password: {type: String, 'default':''}
+	    , name: {type: String, index: 'hashed', 'default':''}
+	    , salt: {type:String}
+	    , created_at: {type: Date, index: {unique: false}, 'default': Date.now}
+	    , updated_at: {type: Date, index: {unique: false}, 'default': Date.now}
+	    , provider : {type : String, 'default' : ''}
+	    , authToken : {type : String, 'default' :''}
+	    , facebook : { }
+	});
     //virtualization for password
     UserSchema
         .virtual('password')

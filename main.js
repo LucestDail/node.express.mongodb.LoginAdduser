@@ -18,6 +18,8 @@ var config = require('./config');
 var route_loader = require('./route');
 var database = require('./database');
 var app = express();
+var socketio = require('socket.io');
+var cors = require('cors');
 
 app.set('views', __dirname + '/views');
 app.set('view engine','ejs');
@@ -41,6 +43,7 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+app.use(cors());
 
 //router module depend on route.js
 var router = express.Router();
@@ -52,6 +55,7 @@ configPassport(app, passport);
 
 var userPassport = require('./user_passport');
 userPassport(router, passport);
+
 
 // error handling function, module importing, use it as middleware when httperror 404 happened, outprint 404.html
 var errorHandler = expressErrorHandler({
@@ -66,7 +70,7 @@ app.use(errorHandler);
 //if uncaughtException occured, server process maintain
 process.on('uncaughtException', function (err) {
 	console.log('uncaughtException 발생함 : ' + err);
-	console.log('서버 프로세스 종료하지 않고 유지함.');
+	console.log('maintain server process, not terminate');
 	console.log(err.stack);
 });
 
@@ -84,8 +88,51 @@ app.on('close', function () {
 });
 
 // server function, ues app struct 'port' num(if would be contain env port or 3000)
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app).listen(app.get('port'), function(){
    console.log('express web server port : '+ app.get('port'));
     
     database.init(app,config);
 });
+
+var io = socketio.listen(server);
+console.log('socket.io has been called');
+var login_ids = {};
+io.sockets.on('connection', function(socket){
+    console.log('connection info : ' + JSON.stringify(socket.request.connection._peername));
+    socket.remoteAddress = socket.request.connection._peername.address;
+    socket.remotePort = socket.request.connection._peername.port;
+    
+    socket.on('message',function(message){
+        console.log('message has been called' + JSON.stringify(message));
+        if(message.recepient == 'ALL'){
+            console.log('All client has been transfered');
+            io.sockets.emit('message', message);
+        }else{
+            if(login_ids[message.recepient]){
+                io.sockets.connected[login_ids[message.recepient]].emit('message',message);
+                sendResponse(socket, 'message','200','message has been sended');
+            }else{
+                sendResponse(socket,'login','404','cant find sender id');
+            }
+        }   
+    });
+    socket.on('login', function(login){
+        console.log('login event has been called');
+        console.dir(login);
+        
+        console.log('connected socket id : ' + JSON.stringify(socket.id));
+        login_ids[login.id] = socket.id;
+        socket.login_id = login.id;
+        console.log('number of connected client id : ' + JSON.stringify(Object.keys(login_ids).length));
+        sendResponse(socket, 'login','200','login has been successed');
+    });
+});
+
+function sendResponse(socket, command, code, message){
+    var statusObj = {
+        command : command,
+        code : code,
+        message : message
+    };
+    socket.emit('response', statusObj);
+}

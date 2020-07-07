@@ -17,7 +17,7 @@ module.exports = {
     ,facebook: {		// passport facebook
 		clientID: '277904173465784',
 		clientSecret: '7d274ca83f4de1fa3e8d5b5aa62616c0',
-		callbackURL: 'http://localhost:3000/auth/facebook/callback'
+		callbackURL: '/auth/facebook/callback'
 	}
     /*
     ,twitter: {		// passport twitter
