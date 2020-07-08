@@ -113,7 +113,7 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
                 A. Change main code for adding chating module(using socket.io)
         4-9-2. Add
                 A. Add chat01 ~ 03 html file for checking, testing and struct chatting utility
-    4-10. 2020. 7. 8. 13:20(KR)
+    4-10. 2020. 7. 8. 20:30(KR)
         4-10-1. Modifiy 
                 A. Change main code for adding group chating
                 B. Change Chat.html file for adding utility about group chatting room creating, updating, and deleting.(it also depend on main.js chat/socket.io middleware)

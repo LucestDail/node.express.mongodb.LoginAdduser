@@ -108,11 +108,17 @@ io.sockets.on('connection', function(socket){
             console.log('All client has been transfered');
             io.sockets.emit('message', message);
         }else{
-            if(login_ids[message.recepient]){
-                io.sockets.connected[login_ids[message.recepient]].emit('message',message);
-                sendResponse(socket, 'message','200','message has been sended');
-            }else{
-                sendResponse(socket,'login','404','cant find sender id');
+            if(message.command === 'chat'){
+                if(login_ids[message.recepient]){
+                    io.sockets.connected[login_ids[message.recepient]].emit('message',message);
+                    sendResponse(socket,'message','200','message has been sended');
+                }else{
+                    sendResponse(socket,'login','404','cant find user id');
+                }
+            }
+            else if(message.command ==='groupchat'){
+                io.sockets.in(message.recepient).emit('message',message);
+                sendResponse(socket,'message','200','chat room [' + message.recepient + '] sended');
             }
         }   
     });
@@ -120,7 +126,6 @@ io.sockets.on('connection', function(socket){
     socket.on('login', function(login){
         console.log('login event has been called');
         console.dir(login);
-        
         console.log('connected socket id : ' + JSON.stringify(socket.id));
         login_ids[login.id] = socket.id;
         socket.login_id = login.id;
@@ -155,8 +160,13 @@ io.sockets.on('connection', function(socket){
             }else{
                 console.log('room is not exist');
             }
-        } 
-        
+        }else if(room.command === 'join'){
+            socket.join(room.roomId);
+            sendResponse(socket,'room','200','entering room');
+        }else if(room.command === 'leave'){
+            socket.leave(room.roomId);
+            sendResponse(ssocket,'room','200','leaving room');
+        }
         var roomList = getRoomList();
         var output = {
             command : 'list',
