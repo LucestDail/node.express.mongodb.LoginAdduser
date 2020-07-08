@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Chat Client 03</title>
+		
+		<script src="jquery-3.1.1.min.js"></script>        
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+        
+        <script>
+            var host;
+            var port;
+            var socket;
+            $(function() {
+				$("#connectButton").bind('click', function(event) {
+					println('connectButton has been called');					
+                    host = $('#hostInput').val();
+                    port = $('#portInput').val();
+                    connectToServer();
+                });
+                $("#sendButton").bind('click', function(event) {
+                    var sender = $('#senderInput').val();
+                    var recepient = $('#recepientInput').val();
+                    var data = $('#dataInput').val();
+
+                    var output = {sender:sender, recepient:recepient, command:'chat', type:'text', data:data};
+                    console.log('sending data : ' + JSON.stringify(output));
+
+                    if (socket == undefined) {
+                        alert('Server is not connected');
+                        return;
+                    }
+
+                    socket.emit('message', output);
+                });
+                
+                
+                $("#loginButton").bind('click', function(event) {
+                    var id = $('#idInput').val();
+                    var password = $('#passwordInput').val();
+                    var alias = $('#aliasInput').val();
+                    var today = $('#todayInput').val();
+                    var output = {
+                        id:id,
+                        password:password,
+                        alias:alias,
+                        today:today
+                    };
+                    console.log('sending data : ' + JSON.stringify(output));
+
+                    if (socket == undefined) {
+                        alert('Server is not connected');
+                        return;
+                    }
+
+                    socket.emit('login', output);
+                });
+                
+                
+                $("#createRoomButton").bind('click', function(event) {
+                    var roomId = $('#roomIdInput').val();
+                    var roomName = $('#roomNameInput').val();
+                    var id = $('#idInput').val();
+                    var output = {
+                        command:'create',
+                        roomId:roomId,
+                        roomName:roomName,
+                        roomOwner:id
+                    };
+                    console.log('sending data : ' + JSON.stringify(output));
+
+                    if (socket == undefined) {
+                        alert('Server is not connected');
+                        return;
+                    }
+
+                    socket.emit('room', output);
+                });
+                $("#updateRoomButton").bind('click', function(event) {
+                    var roomId = $('#roomIdInput').val();
+                    var roomName = $('#roomNameInput').val();
+                    var id = $('#idInput').val();
+                    var output = {
+                        command:'update',
+                        roomId:roomId,
+                        roomName:roomName,
+                        roomOwner:id
+                    };
+                    console.log('sending data : ' + JSON.stringify(output));
+
+                    if (socket == undefined) {
+                        alert('Server is not connected');
+                        return;
+                    }
+
+                    socket.emit('login', output);
+                });
+                $("#deleteRoomButton").bind('click', function(event) {
+                    var roomId = $('#roomIdInput').val();
+                    var output = {
+                        command:'delete',
+                        roomId:roomId,
+                    };
+                    console.log('sending data : ' + JSON.stringify(output));
+
+                    if (socket == undefined) {
+                        alert('Server is not connected');
+                        return;
+                    }
+
+                    socket.emit('login', output);
+                });
+            });
+            function connectToServer() {
+                var options = {'forceNew':true};
+                var url = 'http://' + host + ':' + port;
+                socket = io.connect(url, options);
+                socket.on('connect', function() {
+                	println('Connected server : ' + url);
+                    socket.on('message', function(message) {
+                        console.log(JSON.stringify(message));
+                        println('<p>Receive message : ' + message.sender + ', ' + message.recepient + ', ' + message.command + ', ' + message.data + '</p>');
+                    });                    
+                });
+                socket.on('disconnect', function() {
+                    println('connection has been failed.');
+                });
+                
+                socket.on('response', function(response){
+                    console.log(JSON.stringify(response));
+                    println('<p> receive message : ' + response.command + ',' + response.code + ',' + response.message);
+                })
+                
+                socket.on('room', function(data){
+                    console.log(JSON.stringify(data));
+                    println('<p> room event : ' + data.command + '</p>');
+                    println('<p>pulling room list </p>');
+                    if(data.command = 'list'){
+                        var roomCount = data.rooms.length;
+                        $("#roomList").html('<p> room list : ' + roomCount + '</p>');
+                        for (var i=0; i<roomCount; i++){
+                            $("#roomList").append('<p> room #' + 
+                                                  i + ':' +
+                                                  data.rooms[i].id + ',' +
+                                                  data.rooms[i].name + ',' +
+                                                  data.rooms[i].woner + '</p>');
+                        }
+                    }
+                });
+                
+                
+            }            
+			function println(data) {
+				console.log(data);
+				$('#result').append('<p>' + data + '</p>');
+			}
+            
+            
+        </script>
+	</head>
+<body>
+	<h3>Chat Client 03</h3>
+	<br>
+    <div>
+        <h5> Sending Message </h5>
+        <input type="text" id="hostInput" value="localhost" />
+        <input type="text" id="portInput" value="3000" />
+
+        <input type="button" id="connectButton" value="connect" />
+    </div>
+    <br>
+    <br>
+    <div>
+        <h5> Login </h5>
+        <input type="text" id="idInput" value="test01" />
+        <input type="password" id="passwordInput" value="123456" />
+        <input type="text" id="aliasInput" value="mike" />
+        <input type="text" id="todayInput" value="hello!" />
+        <input type="button" id="loginButton" value="login" />
+        <input type="button" id="logoutButton" value="logout" />
+    </div>
+    <br>
+    
+    <div>
+        <h5> Meeting </h5>
+        <input type="text" id="roomIdInput" value="meeting01" />
+        <input type="text" id="roomNameInput" value="meeting0101" />
+        <input type="button" id="createRoomButton" value="createRoom" />
+        <input type="button" id="updateRoomButton" value="updateRoom" />
+        <input type="button" id="deleteRoomButton" value="deleteRoom" />
+    </div>
+    <br>
+    
+    <div>
+    	<div><span>Sender name :</span> <input type="text" id="senderInput" value="test01" /></div>
+	    <div><span>Receiv name :</span> <input type="text" id="recepientInput" value="ALL" /></div>
+	    <div><span>Transf data :</span> <input type="text" id="dataInput" value="hello!"/> </div>
+		<br>
+		<input type="button" id="sendButton" value="전송" />
+	</div>    
+        
+    <hr/>
+    <p>result : </p>
+    <div id="result"></div>
+        
+</body>
+</html>

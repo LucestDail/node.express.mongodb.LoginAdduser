@@ -116,6 +116,7 @@ io.sockets.on('connection', function(socket){
             }
         }   
     });
+    
     socket.on('login', function(login){
         console.log('login event has been called');
         console.dir(login);
@@ -126,7 +127,75 @@ io.sockets.on('connection', function(socket){
         console.log('number of connected client id : ' + JSON.stringify(Object.keys(login_ids).length));
         sendResponse(socket, 'login','200','login has been successed');
     });
+    
+    socket.on('room', function(room){
+        console.log('room event has been callled');
+        console.dir(room);
+        
+        if(room.command === 'create'){
+            if(io.sockets.adapter.rooms[room.roomId]){
+                console.log('room already created');
+            }else{
+                console.log('room has been created');
+                socket.join(room.roomId);
+                var curRoom = io.sockets.adapter.rooms[room.roomId];
+                curRoom.id = room.roomId;
+                curRoom.name = room.roomName;
+                curRoom.owner = room.roomOwner;
+            }
+        }else if(room.command === 'update'){
+            var curRoom = io.sockets.adapter.rooms[room.roomId];
+            curRoom.id = room.roomId;
+            curRoom.name = room.roomName;
+            curRoom.owner = room.roomOwner;
+        }else if(room.command === 'delete'){
+            socket.leave(room.roomId);
+            if(io.sockets.adapter.rooms[room.roomId]){
+                delete io.sockets.adapter.rooms[room.roomId];
+            }else{
+                console.log('room is not exist');
+            }
+        } 
+        
+        var roomList = getRoomList();
+        var output = {
+            command : 'list',
+            rooms : roomList
+        };
+        console.log('sending message : ' + JSON.stringify(output));
+        io.sockets.emit('room', output);
+    });
 });
+
+
+function getRoomList(){
+	console.dir(io.sockets.adapter.rooms);
+    var roomList = [];
+    Object.keys(io.sockets.adapter.rooms).forEach(function(roomId) {
+    	console.log('current room id : ' + roomId);
+    	var outRoom = io.sockets.adapter.rooms[roomId];
+        
+    	var foundDefault = false;
+    	var index = 0;
+        Object.keys(outRoom.sockets).forEach(function(key) {
+            console.log('#' + index + ':' + key + ',' + outRoom.sockets[key]);
+            
+            if(roomId == key){
+                foundDefault = true;
+                console.log('this is default room');
+            }
+            index++; 
+        });
+        
+        if(!foundDefault){
+            roomList.push(outRoom);
+        } 
+    });
+    console.log('[ROOM LIST]');
+    console.dir(roomList);
+    return roomList;
+}
+
 
 function sendResponse(socket, command, code, message){
     var statusObj = {
@@ -136,3 +205,4 @@ function sendResponse(socket, command, code, message){
     };
     socket.emit('response', statusObj);
 }
+

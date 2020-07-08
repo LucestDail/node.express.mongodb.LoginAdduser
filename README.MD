@@ -109,10 +109,14 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
         4-8-1. ETC
                 A. Passport bia facebook gonna be terminated because cant find why hashed_password path has been activated... 
     4-9. 2020. 7. 7. 17:50(KR)
-        4-7-1. Modifiy 
+        4-9-1. Modifiy 
                 A. Change main code for adding chating module(using socket.io)
-        4-7-2. Add
+        4-9-2. Add
                 A. Add chat01 ~ 03 html file for checking, testing and struct chatting utility
+    4-10. 2020. 7. 8. 13:20(KR)
+        4-10-1. Modifiy 
+                A. Change main code for adding group chating
+                B. Change Chat.html file for adding utility about group chatting room creating, updating, and deleting.(it also depend on main.js chat/socket.io middleware)
 </pre></h3>
 <br>
 <h3><pre>
