@@ -1,0 +1,57 @@
+<!doctype>
+<html>
+    <head>
+        <meta charset = 'utf-8'>
+        <meta name = "viewport" content="width=device-width, height=device-height, initial-scale = 1">
+        <title> ECHO TESTING </title>
+		<script src="jquery-3.1.1.min.js"></script>        
+		<script src="jquery.jsonrpc.js"></script>	
+        <script>
+        $(function(){
+            $.jsonRPC.setup({
+                endPoint : 'http://localhost:3000/api',
+                namespace : ''
+            });
+            $("#requestButton").click(function(){
+                var message = $("#messageInput").val();
+                var method = 'echo';
+                
+                $.jsonRPC.request(method,{
+                    id : 1001,
+                    params : [message],
+                    success : function(data){
+                        println('respond normal message');
+                        console.dir(data);
+                        println(data.result);
+                    },
+                    error : function(data){
+                        println('respond error message');
+                        console.dir(data);
+                        println(data.error.message);
+                    }
+                });
+                println('has been request about' + method);
+            });
+        });
+			function println(data) {
+				console.log(data);
+				$('#results').append('<p>' + data + '</p>');
+			}
+        
+        </script>
+    </head>
+    <body>
+        <div class = "container">
+            <h3>  JSON ECHO TEST PAGE</h3>
+            <br>
+            <textarea name = "messageInput" id = "messageInput">
+            </textarea>
+            <br>
+            <input type = "button" name = "requestButton" id = "requestButton" value = "requesting">
+            <br>
+            <p> RESULT </p>
+            <div id = "results">
+            </div>
+        </div>
+    </body>
+</html>

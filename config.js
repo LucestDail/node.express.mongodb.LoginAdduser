@@ -7,6 +7,7 @@ module.exports = {
     schemaName : 'UserSchema',
     modelName : 'UserModel'
 }],
+    jsonrpc_api_path : '/api',
     route_info : [
         /*
         {file : './user', path : '/process/login', method : 'login', type : 'post'},

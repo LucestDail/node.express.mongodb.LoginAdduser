@@ -117,6 +117,14 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
         4-10-1. Modifiy 
                 A. Change main code for adding group chating
                 B. Change Chat.html file for adding utility about group chatting room creating, updating, and deleting.(it also depend on main.js chat/socket.io middleware)
+    4-11. 2020. 7. 9. 20:50(KR)
+        4-11-1. Modifiy 
+                A. Change main code for adding JSON module
+        4-11-2. Add
+                A. Add Handler module and loader, info js file
+                B. Add ehco module(html and js file)
+        4-11-3. ETC
+                A. NPM updated(6.14.5 -> 6.14.6)
 </pre></h3>
 <br>
 <h3><pre>

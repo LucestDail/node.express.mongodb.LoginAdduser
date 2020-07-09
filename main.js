@@ -20,6 +20,9 @@ var database = require('./database');
 var app = express();
 var socketio = require('socket.io');
 var cors = require('cors');
+var jayson = require('jayson');
+var handler_loader = require('./handler_loader');
+
 
 app.set('views', __dirname + '/views');
 app.set('view engine','ejs');
@@ -56,6 +59,9 @@ configPassport(app, passport);
 var userPassport = require('./user_passport');
 userPassport(router, passport);
 
+var jsonrpc_api_path = config.jsonrpc_api_path||'/api';
+handler_loader.init(jayson,app,jsonrpc_api_path);
+console.log('jsonrpc has beeen added following path : ' + JSON.stringify(jsonrpc_api_path));
 
 // error handling function, module importing, use it as middleware when httperror 404 happened, outprint 404.html
 var errorHandler = expressErrorHandler({
