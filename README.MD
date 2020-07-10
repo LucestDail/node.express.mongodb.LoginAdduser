@@ -1,16 +1,16 @@
 <html><body>
 <br>
-<h1>
+<h2>
 READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM@GMAIL.COM
-</h1>
+</h2>
 <br>
-<h2><pre>
+<h3><pre>
 1. Project name : node.express.mongodb.loginAdduser
     1-1. This project is my testing project for connect with node, express, and mongodb
     1-2. DATE : 2020. 6. 25. 11:20(KR)
-</pre></h2>
+</pre></h3>
 <br>
-<h3><pre>
+<h4><pre>
 2. Project information
     2-1. Node(Express included)
         - Module information : package.json
@@ -23,9 +23,9 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
         - MongoDB Compass Community 1.21.2
     2-4. Code editer
         - Brackets : splint 14 build 1.14.2-17770 (release-1.14.2 f71f00acc) 
-</pre></h3>
+</pre></h4>
 <br>
-<h3><pre>
+<h4><pre>
 3. Contribute
     3-1. following example, Write your contribute 
 <blockquote>
@@ -46,8 +46,8 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
                 A. Stabilize this code for this reason, it came this result
                 B. NPM updated(6.14.4 -> 6.14.5)
 </blockquote>
-</pre></h3>
-<h3><pre>
+</pre></h4>
+<h4><pre>
 4. Code Status
     4-1. 2020. 6. 25. 19:05(KR)
         4-1-1. Modification.
@@ -125,9 +125,15 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
                 B. Add ehco module(html and js file)
         4-11-3. ETC
                 A. NPM updated(6.14.5 -> 6.14.6)
-</pre></h3>
+    4-12. 2020. 7. 10. 10:00(KR)
+        4-2-1. Modifiy 
+                A. Change main code for adding echo error test and add calculator
+        4-12-2. Add
+                A. Add calculator depend on json-rpc module(html and js file)
+                B. Add ehco Error test(html and js file)
+</pre></h4>
 <br>
-<h3><pre>
+<h4><pre>
 5. Caution
     5-1. MIT LICENSE
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -137,5 +143,5 @@ READ IT FIRST AND ANYTHING YOU WOULD LIKE TO CONTACT ME, MAIL IT TO DHTMDGUSSKSM
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
-</pre></h3>
+</pre></h4>
 </body></html>
